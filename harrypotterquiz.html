@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Harry Potter Quiz</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+    /* Update the quiz container */
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Update the question section */
+    .question {
+      margin-bottom: 30px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Update the buttons */
+    button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 18px;
+      transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    /* Add some hover effect to the answer choices */
+    input[type="radio"]:hover {
+      transform: scale(1.1);
+    }
+
+    /* Style the result message */
+    #result {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+
+    img {
+    width: 760px; /* Set your desired width */
+    height: 360px; /* Set your desired height */
+    object-fit: cover; /* Maintain aspect ratio and cover container */
+    display: block; /* Prevent extra space below images */
+    margin-bottom: 10px; /* Add some spacing between images and text */
+  }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Harry Potter Quiz</h1>
+    <div class="question">
+        <img src="que1.jpeg" alt="Question 1">
+        <p>Who is the headmaster of Hogwarts School of Witchcraft and Wizardry in the first book?</p>
+        <input type="radio" name="question1" value="a"> a) Severus Snape<br>
+        <input type="radio" name="question1" value="b"> b) Albus Dumbledore<br>
+        <input type="radio" name="question1" value="c"> c) Minerva McGonagall<br>
+      </div>
+      <div class="question">
+        <img src="que2.jpeg" alt="Question 2">
+        <p>What is the name of the pub in which Harry first meets Hagrid?</p>
+        <input type="radio" name="question2" value="a"> a) The Leaky Cauldron<br>
+        <input type="radio" name="question2" value="b"> b) The Three Broomsticks<br>
+        <input type="radio" name="question2" value="c"> c) The Hog's Head<br>
+      </div>
+      <div class="question">
+        <img src="que3.webp" alt="Question 3">
+        <p>What house does the Sorting Hat initially consider placing Harry in?</p>
+        <input type="radio" name="question3" value="a"> a) Slytherin<br>
+        <input type="radio" name="question3" value="b"> b) Ravenclaw<br>
+        <input type="radio" name="question3" value="c"> c) Hufflepuff<br>
+      </div>
+      <div class="question">
+        <img src="que4.webp" alt="Question 4">
+        <p>What is the name of Hermione Granger's cat?</p>
+        <input type="radio" name="question4" value="a"> a) Crookshanks<br>
+        <input type="radio" name="question4" value="b"> b) Mrs. Norris<br>
+        <input type="radio" name="question4" value="c"> c) Fang<br>
+      </div>
+      <div class="question">
+        <img src="que5.webp" alt="Question 5">
+        <p>Who is the ghost of Ravenclaw House?</p>
+        <input type="radio" name="question5" value="a"> a) Nearly Headless Nick<br>
+        <input type="radio" name="question5" value="b"> b) The Grey Lady<br>
+        <input type="radio" name="question5" value="c"> c) Moaning Myrtle<br>
+      </div>
+      <div class="question">
+        <img src="que6.jpeg" alt="Question 6">
+        <p>What is the core of Harry Potter's wand?</p>
+        <input type="radio" name="question6" value="a"> a) Phoenix feather<br>
+        <input type="radio" name="question6" value="b"> b) Dragon heartstring<br>
+        <input type="radio" name="question6" value="c"> c) Unicorn hair<br>
+      </div>
+      <div class="question">
+        <img src="que7.jpeg" alt="Question 7">
+        <p>Who is the Weasley sibling that Harry first meets on Platform 9¾?</p>
+        <input type="radio" name="question7" value="a"> a) Ginny Weasley<br>
+        <input type="radio" name="question7" value="b"> b) Percy Weasley<br>
+        <input type="radio" name="question7" value="c"> c) Fred Weasley<br>
+      </div>
+      <div class="question">
+        <img src="que8.webp" alt="Question 8">
+        <p>What is the name of the house-elf who serves the Malfoy family?</p>
+        <input type="radio" name="question8" value="a"> a) Kreacher<br>
+        <input type="radio" name="question8" value="b"> b) Dobby<br>
+        <input type="radio" name="question8" value="c"> c) Winky<br>
+      </div>
+      <div class="question">
+        <img src="que9.jpeg" alt="Question 9">
+        <p>What magical item does Harry receive on his first Christmas at Hogwarts?</p>
+        <input type="radio" name="question9" value="a"> a) Invisibility Cloak<br>
+        <input type="radio" name="question9" value="b"> b) Sneakoscope<br>
+        <input type="radio" name="question9" value="c"> c) Marauder's Map<br>
+      </div>
+      <div class="question">
+        <img src="que10.jpeg" alt="Question 10">
+        <p>Which of these is not a Hogwarts house?</p>
+        <input type="radio" name="question10" value="a"> a) Gryffindor<br>
+        <input type="radio" name="question10" value="b"> b) Hufflepuff<br>
+        <input type="radio" name="question10" value="c"> c) Wizengamot<br>
+      </div>
+      <div class="question">
+        <img src="que11.jpeg" alt="Question 11">
+        <p>What is the name of the Gringotts goblin who helps Harry break into his vault?</p>
+        <input type="radio" name="question11" value="a"> a) Griphook<br>
+        <input type="radio" name="question11" value="b"> b) Ragnok<br>
+        <input type="radio" name="question11" value="c"> c) Bogrod<br>
+      </div>
+      <div class="question">
+        <img src="que12.jpeg" alt="Question 12">
+        <p>What is the name of the street where the Dursleys live?</p>
+        <input type="radio" name="question12" value="a"> a) Magnolia Crescent<br>
+        <input type="radio" name="question12" value="b"> b) Privet Drive<br>
+        <input type="radio" name="question12" value="c"> c) Spinner's End<br>
+      </div>
+      <div class="question">
+        <img src="que13.webp" alt="Question 13">
+        <p>What does S.P.E.W. stand for?</p>
+        <input type="radio" name="question13" value="a"> a) Society for the Promotion of Elfish Welfare<br>
+        <input type="radio" name="question13" value="b"> b) Society for the Protection of Enchanted Wizards<br>
+        <input type="radio" name="question13" value="c"> c) Secret Plan to End Wizardry<br>
+      </div>
+      <div class="question">
+        <img src="que14.avif" alt="Question 14">
+        <p>What is the name of the author of "Fantastic Beasts and Where to Find Them"?</p>
+        <input type="radio" name="question14" value="a"> a) Newt Scamander<br>
+        <input type="radio" name="question14" value="b"> b) Gilderoy Lockhart<br>
+        <input type="radio" name="question14" value="c"> c) J.K. Rowling<br>
+      </div>
+      <div class="question">
+        <img src="que15.jpeg" alt="Question 15">
+        <p>What magical effect occurs when a Dementor is nearby?</p>
+        <input type="radio" name="question15" value="a"> a) Patronus Charm<br>
+        <input type="radio" name="question15" value="b"> b) Levitation<br>
+        <input type="radio" name="question15" value="c"> c) Drain of Happiness<br>
+      </div>
+      <button onclick="submitQuiz()">Submit</button>
+      <div id="result"></div>
+    </div>
+
+    <a href="moviemoji.html" class="next-button">Next</a>
+
+  
+    <script>
+      function submitQuiz() {
+        const answers = ['b', 'a', 'a', 'a', 'b', 'a', 'b', 'b', 'a', 'c', 'a', 'b', 'a', 'c', 'a', 'a', 'b', 'a', 'c', 'a']; // Add the correct answers for all questions
+        let score = 0;
+  
+        // Loop through each question and check if the selected answer matches the correct answer
+        for (let i = 1; i <= 20; i++) {
+          const selectedAnswer = document.querySelector(`input[name="question${i}"]:checked`);
+          if (selectedAnswer) {
+            const selectedValue = selectedAnswer.value;
+            if (selectedValue === answers[i - 1]) {
+              score++;
+            }
+          }
+        }
+  
+        // Display the score on a full-page view
+        document.body.innerHTML = `
+    <div style="text-align: center; margin-top: 50px;">
+      <h2>Your score is: ${score} out of 20</h2>
+      <p>${getScoreMessage(score)}</p>
+      <div style="display: flex; justify-content: center;">
+        <button onclick="restartQuiz()" style="margin: 0 10px; padding: 10px 20px; background-color: #7a007a; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">Restart Quiz</button>
+        <a href="next_page.html" style="margin: 0 10px; padding: 10px 20px; background-color: #7a007a; color: #fff; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; font-size: 16px;">Nope, next thing</a>
+      </div>
+    </div>
+  `;
+}
+  
+      function getScoreMessage(score) {
+        if (score === 20) {
+          return "Wow! You're a Harry Potter expert!";
+        } else if (score >= 15) {
+          return "Great job! You know a lot about Harry Potter!";
+        } else if (score >= 10) {
+          return "Not bad! You have a good knowledge of Harry Potter!";
+        } else {
+          return "Keep practicing! You can improve your Harry Potter knowledge!";
+        }
+      }
+  
+      function restartQuiz() {
+        window.location.reload();
+      }
+  </script>
+</body>
+</html>

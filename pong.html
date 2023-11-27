@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WhimsiPong</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f8f8f8; /* Light grey background */
+    }
+
+    canvas {
+      border: 3px solid #000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+  </style>
+</head>
+<body>
+
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <a href="quiz2.html" class="next-button">Next</a>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const ballSize = 10;
+    let ballX = canvas.width / 2;
+    let ballY = canvas.height / 2;
+    let ballSpeedX = 5;
+    let ballSpeedY = 5;
+
+    const paddleWidth = 10;
+    const paddleHeight = 100;
+    const paddleMargin = 20;
+    let player1Y = canvas.height / 2 - paddleHeight / 2;
+    let player2Y = canvas.height / 2 - paddleHeight / 2;
+
+    let scorePlayer1 = 0;
+    let scorePlayer2 = 0;
+
+    function drawRect(x, y, width, height, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, width, height);
+    }
+
+    function drawBall(x, y, size, color) {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function draw() {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw paddles
+      drawRect(paddleMargin, player1Y, paddleWidth, paddleHeight, 'black');
+      drawRect(canvas.width - paddleWidth - paddleMargin, player2Y, paddleWidth, paddleHeight, 'black');
+
+      // Draw ball
+      drawBall(ballX, ballY, ballSize, 'black');
+
+      // Move the ball
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+
+      // Ball collision with top/bottom walls
+      if (ballY < ballSize || ballY > canvas.height - ballSize) {
+        ballSpeedY = -ballSpeedY;
+      }
+
+      // Ball collision with paddles
+      if (
+        (ballX <= paddleWidth + paddleMargin && ballY > player1Y && ballY < player1Y + paddleHeight) ||
+        (ballX >= canvas.width - paddleWidth - paddleMargin - ballSize && ballY > player2Y && ballY < player2Y + paddleHeight)
+      ) {
+        ballSpeedX = -ballSpeedX;
+      }
+
+      // Ball out of bounds
+      if (ballX < ballSize) {
+        scorePlayer2++;
+        resetBall();
+      } else if (ballX > canvas.width - ballSize) {
+        scorePlayer1++;
+        resetBall();
+      }
+
+      // AI player
+      const aiSpeed = 5;
+      const missChance = Math.random() < 0.1; // 10% chance of missing
+      if (!missChance) {
+        if (player2Y + paddleHeight / 2 < ballY) {
+          player2Y += aiSpeed;
+        } else {
+          player2Y -= aiSpeed;
+        }
+      }
+
+      // Boundaries for paddles
+      if (player1Y < 0) player1Y = 0;
+      if (player2Y < 0) player2Y = 0;
+      if (player1Y > canvas.height - paddleHeight) player1Y = canvas.height - paddleHeight;
+      if (player2Y > canvas.height - paddleHeight) player2Y = canvas.height - paddleHeight;
+
+      // Display scores
+      ctx.fillStyle = 'black';
+      ctx.fillText(`Player 1: ${scorePlayer1}`, 50, 50);
+      ctx.fillText(`Player 2: ${scorePlayer2}`, canvas.width - 150, 50);
+    }
+
+    function resetBall() {
+      ballX = canvas.width / 2;
+      ballY = canvas.height / 2;
+      ballSpeedX = -ballSpeedX;
+      ballSpeedY = -ballSpeedY;
+    }
+
+    setInterval(draw, 1000 / 60);
+
+    canvas.addEventListener('mousemove', function (event) {
+      let mousePos = event.clientY - canvas.getBoundingClientRect().top - paddleHeight / 2;
+      if (mousePos >= 0 && mousePos <= canvas.height - paddleHeight) {
+        player1Y = mousePos;
+      }
+    });
+  </script>
+</body>
+</html>

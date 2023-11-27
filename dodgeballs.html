@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dodge Ball Game</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #f3d0c8, #a8e0e8);
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    .next-button {
+      display: inline-block;
+      padding: 50px 50px;
+      border-radius: 50%;
+      background-color: #ff4081;
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999; /* Ensures it stays on top */
+      transition: background-color 0.3s ease;
+    }
+
+    /* Optional: Hover effect */
+    .next-button:hover {
+      background-color: #f50057;
+    }
+
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <a href="harrypotterquiz.html" class="next-button">Next</a>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const balls = [];
+
+    function createBall() {
+      const radius = Math.random() * 20 + 5;
+      const speedX = Math.random() - 0.5;
+      const speedY = Math.random() - 0.5;
+      const color = '#' + (Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
+
+      balls.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius,
+        speedX,
+        speedY,
+        color
+      });
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      balls.forEach(ball => {
+        ctx.fillStyle = ball.color;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ball.x += ball.speedX;
+        ball.y += ball.speedY;
+
+        if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+          ball.speedX *= -1;
+        }
+
+        if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+          ball.speedY *= -1;
+        }
+      });
+
+      requestAnimationFrame(update);
+    }
+
+    function generateBalls() {
+      setInterval(createBall, 500); // Generate a new ball every 0.5 seconds
+    }
+
+    generateBalls();
+    update();
+
+    const player = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 15,
+      color: 'red'
+    };
+
+    canvas.addEventListener('mousemove', function(event) {
+      const rect = canvas.getBoundingClientRect();
+      player.x = event.clientX - rect.left;
+      player.y = event.clientY - rect.top;
+    });
+
+    canvas.addEventListener('click', function(event) {
+      const rect = canvas.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickY = event.clientY - rect.top;
+
+      for (let i = 0; i < balls.length; i++) {
+        const ball = balls[i];
+        const distance = Math.sqrt((clickX - ball.x) ** 2 + (clickY - ball.y) ** 2);
+
+        if (distance <= ball.radius) {
+          balls.splice(i, 1);
+          break;
+        }
+      }
+    });
+
+    function checkCollision(ball1, ball2) {
+      const distance = Math.sqrt((ball1.x - ball2.x) ** 2 + (ball1.y - ball2.y) ** 2);
+      return distance < ball1.radius + ball2.radius;
+    }
+
+    function checkPlayerCollision() {
+      for (let i = 0; i < balls.length; i++) {
+        if (checkCollision(player, balls[i])) {
+          console.log('Game Over! You collided with a ball!');
+          return;
+        }
+      }
+      requestAnimationFrame(checkPlayerCollision);
+    }
+
+    checkPlayerCollision();
+  </script>
+</body>
+</html>

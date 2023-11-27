@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MCU Avengers Quiz</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-image: url('marvel.jpeg'); /* Replace 'your_background_image_url.jpg' with your image URL */
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    #quiz-container {
+      max-width: 600px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1, h2, p {
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 12px 24px;
+      margin: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .answer {
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      background-color: #fff;
+      transition: background-color 0.3s;
+    }
+
+    .answer:hover {
+      background-color: #f0f0f0;
+    }
+
+      .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+    /* Rest of your CSS styles remain unchanged */
+    /* ... */
+  </style>
+</head>
+<body>
+  <div id="quiz-container">
+    <h1>Discover Which MCU Avenger You Are!</h1>
+    <p>Answer the questions below to find out...</p>
+    <button onclick="startQuiz()">Start</button>
+    <!-- Rest of your quiz content remains unchanged -->
+    <div id="question" style="display: none;">
+      <h2 id="question-text">Question 1: What's your favorite color?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan">Red</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica">Blue</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor">Silver</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk">Definitely not green</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow">Black</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye">Purple</button>
+    </div>
+  
+    <!-- Question 2 -->
+    <div id="question2" style="display: none;">
+      <h2 id="question-text2">Question 2: Which environment feels most like home to you?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan2">City</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica2">Mountains</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor2">Countryside</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk2">Space</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow2">Underwater</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye2">Anywhere with a view</button>
+    </div>
+  
+    <!-- Question 3 -->
+    <div id="question3" style="display: none;">
+      <h2 id="question-text3">Question 3: What's your go-to way to unwind after a long day?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan3">Listening to music</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica3">Working out</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor3">Taking a nap</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk3">Reading a book</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow3">Watching a movie/TV</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye3">Spending time outdoors</button>
+    </div>
+  
+    <!-- Question 4 -->
+    <div id="question4" style="display: none;">
+      <h2 id="question-text4">Question 4: If you were in a food fight, what would be your weapon of choice?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan4">Anything high-tech</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica4">Shield</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor4">Hammer</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk4">Raw strength</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow4">Something small and maneuverable</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye4">Precision and strategy</button>
+    </div>
+  
+    <!-- Question 5 -->
+    <div id="question5" style="display: none;">
+      <h2 id="question-text5">Question 5: What animal would be your spirit companion?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan5">Eagle</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica5">Bear</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor5">Wolf</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk5">Tiger</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow5">Hawk</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye5">Owl</button>
+    </div>
+  
+    <!-- Question 6 -->
+    <div id="question6" style="display: none;">
+      <h2 id="question-text6">Question 6: What's your favorite type of weather?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan6">Sunny</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica6">Rainy</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor6">Thunderstorm</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk6">Snowy</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow6">Foggy</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye6">Windy</button>
+    </div>
+  
+    <!-- Question 7 -->
+    <div id="question7" style="display: none;">
+      <h2 id="question-text7">Question 7: If you could have any superpower, what would it be?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan7">Flight</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica7">Enhanced agility</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor7">Control over lightning</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk7">Super strength</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow7">Invisibility</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye7">Enhanced accuracy</button>
+    </div>
+  
+    <!-- Question 8 -->
+    <div id="question8" style="display: none;">
+      <h2 id="question-text8">Question 8: What's your preferred method of solving conflicts?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan8">Using intelligence and technology</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica8">Diplomacy and strategy</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor8">Brute force with strategy</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk8">Overwhelming force</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow8">Stealth and strategy</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye8">Precision and analysis</button>
+    </div>
+  
+    <!-- Question 9 -->
+    <div id="question9" style="display: none;">
+      <h2 id="question-text9">Question 9: What's your favorite element?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan9">Fire</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica9">Earth</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor9">Lightning</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk9">Gamma radiation</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow9">Water</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye9">Wind</button>
+    </div>
+  
+    <!-- Question 10 -->
+    <div id="question10" style="display: none;">
+      <h2 id="question-text10">Question 10: Which quality do you value most in a team?</h2>
+      <button class="answer" onclick="selectAnswer('IronMan')" id="ironMan10">Individual strengths and innovation</button>
+      <button class="answer" onclick="selectAnswer('CaptainAmerica')" id="captainAmerica10">Loyalty and teamwork</button>
+      <button class="answer" onclick="selectAnswer('Thor')" id="thor10">Adaptability and courage</button>
+      <button class="answer" onclick="selectAnswer('Hulk')" id="hulk10">Strength and resilience</button>
+      <button class="answer" onclick="selectAnswer('BlackWidow')" id="blackwidow10">Adaptability and resourcefulness</button>
+      <button class="answer" onclick="selectAnswer('Hawkeye')" id="hawkeye10">Teamwork and precision</button>
+    </div>
+
+    <button id="submitBtn" onclick="showResult()">Submit</button>
+    <!-- ... -->
+    <div id="result" style="display: none;">
+      <h2>You're most like:</h2>
+      <p id="result-text"></p>
+      <img id="avenger-image" src="" alt="Avenger Image">
+    </div>
+  </div>
+
+  <!-- Optional Next Button -->
+  <a href="agecalculator.html" class="next-button">Next</a>
+
+  <script>
+    const heroCounts = {
+      IronMan: 0,
+      CaptainAmerica: 0,
+      Thor: 0,
+      Hulk: 0,
+      BlackWidow: 0,
+      Hawkeye: 0
+    };
+
+    function selectAnswer(hero) {
+      heroCounts[hero]++;
+    }
+
+    function calculateResult() {
+      let maxCount = 0;
+      let resultHero = '';
+
+      for (const hero in heroCounts) {
+        if (heroCounts[hero] > maxCount) {
+          maxCount = heroCounts[hero];
+          resultHero = hero;
+        }
+      }
+
+      return resultHero;
+    }
+
+    function showResult() {
+      const resultHero = calculateResult();
+
+      document.getElementById('result-text').textContent = "You're most like: " + resultHero;
+      document.getElementById('avenger-image').src = "images/" + resultHero + ".jpg"; // Replace with actual image filenames
+      document.getElementById('result').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

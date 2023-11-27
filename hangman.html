@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WhimsiHangman</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #fff8dc; /* Pale yellow background */
+    }
+
+    .container {
+      text-align: center;
+      color: #524f4f; /* Dark grey text */
+    }
+
+    .hangman {
+      margin-top: 20px;
+    }
+
+    .word {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .letter {
+      border-bottom: 1px solid #333;
+      display: inline-block;
+      width: 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+
+    .wrong-letters {
+      margin-bottom: 20px;
+      font-size: 1.2em;
+    }
+
+    .final-message {
+      display: none;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .play-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #ff847c; /* Coral button color */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .play-button:hover {
+      background-color: #ff524f; /* Brighter coral on hover */
+    }
+
+    .figure-part {
+      stroke: #333;
+      stroke-width: 2;
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+  </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>WhimsiHangman</h1>
+        <div class="hangman">
+          <svg height="250" width="200" class="figure-container">
+            <!-- Gallows and figure parts here (SVG elements) -->
+            <line x1="60" y1="20" x2="140" y2="20" />
+            <line x1="100" y1="20" x2="100" y2="50" />
+            <line x1="140" y1="20" x2="140" y2="220" />
+            <line x1="40" y1="220" x2="180" y2="220" />
+            <circle cx="100" cy="70" r="20" class="figure-part" />
+            <line x1="100" y1="90" x2="100" y2="150" class="figure-part" />
+            <line x1="100" y1="100" x2="70" y2="120" class="figure-part" />
+            <line x1="100" y1="100" x2="130" y2="120" class="figure-part" />
+            <line x1="100" y1="150" x2="80" y2="180" class="figure-part" />
+            <line x1="100" y1="150" x2="120" y2="180" class="figure-part" />
+          </svg>
+          <div class="word" id="word"></div>
+          <p class="wrong-letters" id="wrongLetters"></p>
+          <p class="final-message" id="finalMessage"></p>
+          <button class="play-button" id="playButton">Play Again</button>
+        </div>
+      </div>
+      <a href="tictactoe.html" class="next-button">Next</a>
+
+      <script>
+      const wordElement = document.getElementById('word');
+      const wrongLettersElement = document.getElementById('wrongLetters');
+      const finalMessage = document.getElementById('finalMessage');
+      const playButton = document.getElementById('playButton');
+      
+      const words = ['hangman', 'javascript', 'computer', 'programming', 'developer']; // Add more words here
+      let selectedWord = words[Math.floor(Math.random() * words.length)];
+      
+      const correctLetters = [];
+      const wrongLetters = [];
+      
+      // Display the word in the DOM
+      function displayWord() {
+        wordElement.innerHTML = `
+          ${selectedWord
+            .split('')
+            .map(
+              letter => `
+                <span class="letter">
+                  ${correctLetters.includes(letter) ? letter : ''}
+                </span>
+              `
+            )
+            .join('')}
+        `;
+      
+        const innerWord = wordElement.innerText.replace(/\n/g, '');
+      
+        if (innerWord === selectedWord) {
+          finalMessage.innerText = 'Congratulations! You won!';
+          finalMessage.style.display = 'block';
+        }
+      }
+      
+      // Update the wrong letters
+      function updateWrongLettersElement() {
+        wrongLettersElement.innerHTML = `
+          ${wrongLetters.length > 0 ? '<p>Wrong Letters:</p>' : ''}
+          ${wrongLetters.map(letter => `<span>${letter}</span>`)}
+        `;
+      
+        const parts = document.querySelectorAll('.figure-part');
+        parts.forEach((part, index) => {
+          const errors = wrongLetters.length;
+      
+          if (index < errors) {
+            part.style.display = 'block';
+          } else {
+            part.style.display = 'none';
+          }
+        });
+      
+        if (wrongLetters.length === parts.length) {
+          finalMessage.innerText = 'Unfortunately, you lost. Try again!';
+          finalMessage.style.display = 'block';
+        }
+      }
+      
+      // Show notification
+      function showNotification() {
+        setTimeout(() => {
+          finalMessage.style.display = 'none';
+        }, 2000);
+      }
+      
+      // Keydown letter press
+      window.addEventListener('keydown', e => {
+        if (e.keyCode >= 65 && e.keyCode <= 90) {
+          const letter = e.key.toLowerCase();
+      
+          if (selectedWord.includes(letter)) {
+            if (!correctLetters.includes(letter)) {
+              correctLetters.push(letter);
+              displayWord();
+            } else {
+              // showNotification();
+            }
+          } else {
+            if (!wrongLetters.includes(letter)) {
+              wrongLetters.push(letter);
+              updateWrongLettersElement();
+            } else {
+              // showNotification();
+            }
+          }
+        }
+      });
+      
+      // Play again button click
+      playButton.addEventListener('click', () => {
+        correctLetters.splice(0);
+        wrongLetters.splice(0);
+      
+        selectedWord = words[Math.floor(Math.random() * words.length)];
+        displayWord();
+        updateWrongLettersElement();
+        finalMessage.style.display = 'none';
+      });
+      
+      displayWord();
+      </script>
+</body>
+</html>

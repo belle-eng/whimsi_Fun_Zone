@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Age Calculator</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #fdebd0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #007bff;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="date"] {
+      padding: 8px;
+      width: 100%;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+    }
+
+    #result p {
+      margin-bottom: 5px;
+    }
+
+    span {
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Age Calculator</h2>
+    <label for="dob">Enter your date of birth:</label>
+    <input type="date" id="dob">
+    <button onclick="calculateAge()">Calculate</button>
+
+    <div id="result" style="display: none;">
+      <h3>Your Age:</h3>
+      <p>Years: <span id="years"></span></p>
+      <p>Weeks: <span id="weeks"></span></p>
+      <p>Days: <span id="days"></span></p>
+      <p>Hours: <span id="hours"></span></p>
+      <p>Seconds: <span id="seconds"></span></p>
+    </div>
+  </div>
+  <a href="dodgeballs.html" class="next-button">Next</a>
+
+
+  <script>
+    let secondsTimer;
+
+    function calculateAge() {
+      const dob = new Date(document.getElementById('dob').value);
+      const now = new Date();
+
+      const age = now - dob;
+      const years = Math.floor(age / (365.25 * 24 * 60 * 60 * 1000));
+      const weeks = Math.floor(age / (7 * 24 * 60 * 60 * 1000));
+      const days = Math.floor(age / (24 * 60 * 60 * 1000));
+      const hours = Math.floor(age / (60 * 60 * 1000));
+      const seconds = Math.floor(age / 1000);
+
+      document.getElementById('years').innerText = years;
+      document.getElementById('weeks').innerText = weeks;
+      document.getElementById('days').innerText = days;
+      document.getElementById('hours').innerText = hours;
+      document.getElementById('seconds').innerText = seconds;
+
+      document.getElementById('result').style.display = 'block';
+
+      // Start counting seconds
+      secondsTimer = setInterval(() => {
+        const now = new Date();
+        const ageInSeconds = Math.floor((now - dob) / 1000);
+        document.getElementById('seconds').innerText = ageInSeconds;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

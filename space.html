@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Space Dodge</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #0d0d0d;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden; /* To prevent scroll bars */
+    }
+    canvas {
+      border: 2px solid #fff;
+    }
+    #intro {
+      text-align: center;
+    }
+    #startButton, .popup button {
+      padding: 10px 20px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      background-color: #ff4081;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #startButton:hover, .popup button:hover {
+      background-color: #f50057;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2d2d2d;
+      padding: 20px;
+      border-radius: 8px;
+      z-index: 999;
+    }
+    .popup button {
+      margin: 0 10px;
+      color: #fff;
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+  </style>
+</head>
+<body>
+  <div id="intro">
+    <h1>Welcome to Space Dodge!</h1>
+    <p>Press the button below to start the game.</p>
+    <button id="startButton" onclick="startGame()">Start</button>
+  </div>
+
+  <div class="popup" id="gameOverPopup">
+    <h2>Game Over!</h2>
+    <p>Want to start again?</p>
+    <button onclick="restartGame()">Yeah</button>
+    <button onclick="redirect()">No, Next</button>
+  </div>
+
+  <div class="popup" id="levelPopup">
+    <h2>Level <span id="levelValue"></span></h2>
+  </div>
+
+  <canvas id="gameCanvas" style="display: none;"></canvas>
+
+  <a href="marvelquiz.html" class="next-button">Next</a>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+    const gameOverPopup = document.getElementById("gameOverPopup");
+    const levelPopup = document.getElementById("levelPopup");
+    const levelValue = document.getElementById("levelValue");
+
+    let gameStarted = false;
+    let shipWidth = 30;
+    let shipHeight = 20;
+    let shipX, shipY, shipSpeed = 5;
+    let level = 1, asteroidSpeed = 3;
+    let rightPressed = false, leftPressed = false;
+    let asteroids = [];
+
+    function startGame() {
+      intro.style.display = "none";
+      canvas.style.display = "block";
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      shipX = canvas.width / 2 - shipWidth / 2;
+      shipY = canvas.height - 40;
+      gameStarted = true;
+      level = 1;
+      asteroidSpeed = 3;
+      resetGame();
+      draw();
+      setInterval(increaseLevel, 20000); // Increase level every 20 seconds
+    }
+
+    function increaseLevel() {
+      level++;
+      asteroidSpeed += 1; // Increase asteroid speed slightly with each level
+      showLevelPopup();
+    }
+
+    function showLevelPopup() {
+      levelValue.textContent = level;
+      levelPopup.style.display = "block";
+      setTimeout(() => {
+        levelPopup.style.display = "none";
+      }, 2000);
+    }
+
+    function createAsteroid() {
+      let asteroidRadius = Math.floor(Math.random() * 15) + 10;
+      let asteroidX = Math.random() * (canvas.width - asteroidRadius * 2) + asteroidRadius;
+      let asteroidY = Math.random() * -canvas.height * 2;
+      asteroids.push({ x: asteroidX, y: asteroidY, radius: asteroidRadius });
+    }
+
+    document.addEventListener("keydown", keyDownHandler);
+    document.addEventListener("keyup", keyUpHandler);
+
+    function keyDownHandler(event) {
+      if (event.key === "Right" || event.key === "ArrowRight") {
+        rightPressed = true;
+      } else if (event.key === "Left" || event.key === "ArrowLeft") {
+        leftPressed = true;
+      }
+    }
+
+    function keyUpHandler(event) {
+      if (event.key === "Right" || event.key === "ArrowRight") {
+        rightPressed = false;
+      } else if (event.key === "Left" || event.key === "ArrowLeft") {
+        leftPressed = false;
+      }
+    }
+
+    function drawShip() {
+      ctx.beginPath();
+      ctx.rect(shipX, shipY, shipWidth, shipHeight);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawAsteroids() {
+      asteroids.forEach(asteroid => {
+        ctx.beginPath();
+        ctx.moveTo(asteroid.x + asteroid.radius, asteroid.y);
+        for (let i = 1; i < 7; i++) {
+          let angle = i * Math.PI / 3;
+          let x = asteroid.x + asteroid.radius * Math.cos(angle);
+          let y = asteroid.y + asteroid.radius * Math.sin(angle);
+          ctx.lineTo(x, y);
+        }
+        ctx.fillStyle = "#ff0000";
+        ctx.fill();
+        ctx.closePath();
+      });
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawShip();
+      drawAsteroids();
+
+      if (gameStarted) {
+        if (rightPressed && shipX < canvas.width - shipWidth) {
+          shipX += shipSpeed;
+        } else if (leftPressed && shipX > 0) {
+          shipX -= shipSpeed;
+        }
+
+        asteroids.forEach(asteroid => {
+          asteroid.y += asteroidSpeed;
+          if (
+            asteroid.y + asteroid.radius > shipY &&
+            asteroid.x > shipX &&
+            asteroid.x < shipX + shipWidth
+          ) {
+            gameOverPopup.style.display = "block";
+            gameStarted = false;
+          }
+        });
+
+        asteroids = asteroids.filter(asteroid => asteroid.y < canvas.height + asteroid.radius);
+
+        if (asteroids.length < 15) {
+          createAsteroid();
+        }
+      }
+
+      requestAnimationFrame(draw);
+    }
+
+    function resetGame() {
+      asteroids = [];
+      for (let i = 0; i < 15; i++) {
+        createAsteroid();
+      }
+      shipX = canvas.width / 2 - shipWidth / 2;
+      shipY = canvas.height - 40;
+    }
+
+    function restartGame() {
+      gameOverPopup.style.display = "none";
+      window.location.reload(); // Reloads the page
+    }
+
+    function redirect() {
+      window.location.href = "marvelquiz.html"; // Replace "anotherPage.html" with your desired page
+    }
+
+    draw();
+  </script>
+</body>
+</html>

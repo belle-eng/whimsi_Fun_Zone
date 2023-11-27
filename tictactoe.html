@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WhimsiTacToe</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-color: #f3f3f3; /* Light grey background */
+    }
+
+    .container {
+      text-align: center;
+      color: #524f4f; /* Dark grey text */
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 5px;
+      margin: 20px auto;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #f8f8f8; /* Light grey cell */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .cell:hover {
+      background: #eee; /* Slightly darker on hover */
+    }
+
+    .game-status {
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      background-color: #ff847c; /* Coral button color */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .restart-btn:hover {
+      background-color: #ff524f; /* Brighter coral on hover */
+    }
+
+    .next-button {
+  display: inline-block;
+  padding: 50px 50px;
+  border-radius: 50%;
+  background-color: #ff4081;
+  color: white;
+  text-decoration: none;
+  font-size: 24px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999; /* Ensures it stays on top */
+  transition: background-color 0.3s ease;
+}
+
+/* Optional: Hover effect */
+.next-button:hover {
+  background-color: #f50057;
+}
+
+  </style>
+</head>
+<body>
+
+    <div class="container">
+      <h1>WhimsiTacToe</h1>
+      <div class="board" id="board">
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
+      </div>
+      <p class="game-status" id="status"></p>
+      <button class="restart-btn" id="restartButton">Restart Game</button>
+    </div>
+    <a href="memorymatch.html" class="next-button">Next</a>
+
+    <script>
+      const cells = document.querySelectorAll('[data-cell]');
+      const statusDisplay = document.getElementById('status');
+      const restartButton = document.getElementById('restartButton');
+    
+      let currentPlayer = 'X';
+      let gameActive = true;
+      let gameState = ['', '', '', '', '', '', '', '', ''];
+    
+      const winningConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+    
+      function handleCellClick(clickedCellEvent) {
+        const clickedCell = clickedCellEvent.target;
+        const clickedCellIndex = Array.from(cells).indexOf(clickedCell);
+    
+        if (gameState[clickedCellIndex] !== '' || !gameActive) {
+          return;
+        }
+    
+        handleCellPlayed(clickedCell, clickedCellIndex);
+        handleResultValidation();
+        if (gameActive && currentPlayer === 'O') {
+          // Computer's turn (assuming the computer is 'O')
+          setTimeout(() => {
+            makeComputerMove();
+            handleResultValidation();
+          }, 500); // Delay for a better visualization, adjust as needed
+        }
+      }
+    
+      function handleCellPlayed(clickedCell, clickedCellIndex) {
+        gameState[clickedCellIndex] = currentPlayer;
+        clickedCell.innerHTML = currentPlayer;
+      }
+    
+      function handleResultValidation() {
+        let roundWon = false;
+        for (let i = 0; i <= 7; i++) {
+          const winCondition = winningConditions[i];
+          let a = gameState[winCondition[0]];
+          let b = gameState[winCondition[1]];
+          let c = gameState[winCondition[2]];
+          if (a === '' || b === '' || c === '') {
+            continue;
+          }
+          if (a === b && b === c) {
+            roundWon = true;
+            break;
+          }
+        }
+    
+        if (roundWon) {
+          statusDisplay.innerHTML = `Player ${currentPlayer} has won!`;
+          gameActive = false;
+          return;
+        }
+    
+        let roundDraw = !gameState.includes('');
+        if (roundDraw) {
+          statusDisplay.innerHTML = 'The game is a draw!';
+          gameActive = false;
+          return;
+        }
+    
+        handlePlayerChange();
+      }
+    
+      function handlePlayerChange() {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        statusDisplay.innerHTML = `Current player: ${currentPlayer}`;
+      }
+    
+      function handleRestartGame() {
+        currentPlayer = 'X';
+        gameActive = true;
+        gameState = ['', '', '', '', '', '', '', '', ''];
+        statusDisplay.innerHTML = `Current player: ${currentPlayer}`;
+        cells.forEach(cell => cell.innerHTML = '');
+      }
+    
+      function makeComputerMove() {
+        // Basic AI: Randomly choose an empty cell for the computer's move
+        const emptyCells = gameState.reduce((acc, cell, index) => {
+          if (cell === '') acc.push(index);
+          return acc;
+        }, []);
+    
+        const randomIndex = Math.floor(Math.random() * emptyCells.length);
+        const computerMove = emptyCells[randomIndex];
+        const computerCell = cells[computerMove];
+    
+        handleCellPlayed(computerCell, computerMove);
+      }
+    
+      cells.forEach(cell => {
+        cell.addEventListener('click', handleCellClick);
+      });
+    
+      restartButton.addEventListener('click', handleRestartGame);
+    </script>
+</body>
+</html>
