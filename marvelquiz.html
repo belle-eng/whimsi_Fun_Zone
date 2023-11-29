@@ -180,7 +180,8 @@ const questions = [
 ];
 
 
-    let currentQuestion = 0;
+
+let currentQuestion = 0;
     let score = 0;
 
     function displayQuestion() {
@@ -189,21 +190,14 @@ const questions = [
 
       let choicesHTML = "";
       for (let i = 0; i < q.choices.length; i++) {
-        choicesHTML += `<input type="radio" name="choice" value="${i}">${q.choices[i]}<br>`;
+        choicesHTML += `<button class="answer" onclick="checkChoice(${i})">${q.choices[i]}</button>`;
       }
       document.getElementById("choices").innerHTML = choicesHTML;
     }
 
-    function checkAnswer() {
-      const selectedOption = document.querySelector('input[name="choice"]:checked');
-      if (!selectedOption) {
-        document.getElementById("result").textContent = "Please select an answer.";
-        return;
-      }
-
-      const answer = Number(selectedOption.value);
+    function checkChoice(choice) {
       const correct = questions[currentQuestion].correctAnswer;
-      if (answer === correct) {
+      if (choice === correct) {
         score++;
         document.getElementById("result").textContent = "Correct!";
       } else {
