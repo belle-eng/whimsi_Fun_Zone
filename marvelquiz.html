@@ -5,21 +5,21 @@
   <title>MCU Avengers Quiz</title>
   <style>
     body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-image: url('marvel.jpeg');
+      background-size: cover;
+      background-repeat: no-repeat;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background-image: url('marvel.jpeg'); /* Replace 'your_background_image_url.jpg' with your image URL */
-      background-size: cover;
-      background-repeat: no-repeat;
     }
 
-    #quiz-container {
+    .quiz-container {
       max-width: 600px;
       padding: 20px;
-      background-color: #f9f9f9;
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       text-align: center;
@@ -34,6 +34,15 @@
       margin: 8px;
       font-size: 16px;
       cursor: pointer;
+      background-color: #ff4081;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #f50057;
     }
 
     .answer {
@@ -41,46 +50,78 @@
       border-radius: 6px;
       background-color: #fff;
       transition: background-color 0.3s;
+      padding: 8px;
+      margin: 6px;
+      cursor: pointer;
+      display: inline-block;
+      width: 120px;
     }
 
     .answer:hover {
       background-color: #f0f0f0;
     }
 
-      .next-button {
-  display: inline-block;
-  padding: 50px 50px;
-  border-radius: 50%;
-  background-color: #ff4081;
-  color: white;
-  text-decoration: none;
-  font-size: 24px;
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 999; /* Ensures it stays on top */
-  transition: background-color 0.3s ease;
-}
+    #replayBtn {
+      padding: 12px 24px;
+      margin-top: 20px;
+      background-color: #ff4081;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
 
-/* Optional: Hover effect */
-.next-button:hover {
-  background-color: #f50057;
-}
+    #replayBtn:hover {
+      background-color: #f50057;
+    }
 
-    /* Rest of your CSS styles remain unchanged */
-    /* ... */
+    .next-button {
+      display: inline-block;
+      padding: 50px 50px;
+      border-radius: 50%;
+      background-color: #ff4081;
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+      transition: background-color 0.3s ease;
+    }
+
+    .next-button:hover {
+      background-color: #f50057;
+    }
+    .answer {
+      padding: 10px 20px;
+      margin: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background-color: #fff;
+      transition: background-color 0.3s;
+      display: inline-block;
+    }
+
+    .answer:hover {
+      background-color: #f0f0f0;
+    }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <h1>Marvel Cinematic Universe Quiz</h1>
-    <div id="question"></div>
-    <div id="choices"></div>
-    <button onclick="checkAnswer()">Submit</button>
-    <p id="result"></p>
-    <button onclick="restartQuiz()">Replay</button>
-  </div>
-  <!-- Optional Next Button -->
+    <div class="quiz-container">
+        <h1>Marvel Cinematic Universe Quiz</h1>
+        <div id="question"></div>
+        <div id="choices"></div>
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="result"></p>
+        <button id="replayBtn" onclick="restartQuiz()" style="display: none;">Replay</button>
+      </div>
+
   <a href="agecalculator.html" class="next-button">Next</a>
 
   <script>
@@ -138,68 +179,69 @@ const questions = [
   // Add more questions similarly
 ];
 
-let currentQuestion = 0;
-let score = 0;
 
-function displayQuestion() {
-  const q = questions[currentQuestion];
-  document.getElementById("question").textContent = q.question;
+    let currentQuestion = 0;
+    let score = 0;
 
-  let choicesHTML = "";
-  for (let i = 0; i < q.choices.length; i++) {
-    choicesHTML += `<input type="radio" name="choice" value="${i}">${q.choices[i]}<br>`;
-  }
-  document.getElementById("choices").innerHTML = choicesHTML;
-}
+    function displayQuestion() {
+      const q = questions[currentQuestion];
+      document.getElementById("question").textContent = q.question;
 
-function checkAnswer() {
-  const selectedOption = document.querySelector('input[name="choice"]:checked');
-  if (!selectedOption) {
-    document.getElementById("result").textContent = "Please select an answer.";
-    return;
-  }
+      let choicesHTML = "";
+      for (let i = 0; i < q.choices.length; i++) {
+        choicesHTML += `<input type="radio" name="choice" value="${i}">${q.choices[i]}<br>`;
+      }
+      document.getElementById("choices").innerHTML = choicesHTML;
+    }
 
-  const answer = Number(selectedOption.value);
-  const correct = questions[currentQuestion].correctAnswer;
-  if (answer === correct) {
-    score++;
-    document.getElementById("result").textContent = "Correct!";
-  } else {
-    document.getElementById("result").textContent = `Wrong! The correct answer is ${questions[currentQuestion].choices[correct]}.`;
-  }
+    function checkAnswer() {
+      const selectedOption = document.querySelector('input[name="choice"]:checked');
+      if (!selectedOption) {
+        document.getElementById("result").textContent = "Please select an answer.";
+        return;
+      }
 
-  currentQuestion++;
-  if (currentQuestion < questions.length) {
+      const answer = Number(selectedOption.value);
+      const correct = questions[currentQuestion].correctAnswer;
+      if (answer === correct) {
+        score++;
+        document.getElementById("result").textContent = "Correct!";
+      } else {
+        document.getElementById("result").textContent = `Wrong! The correct answer is ${questions[currentQuestion].choices[correct]}.`;
+      }
+
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        displayQuestion();
+      } else {
+        document.getElementById("question").textContent = `Quiz Completed! Your Score: ${score}/${questions.length}`;
+        displayResultMessage();
+        document.getElementById("choices").innerHTML = "";
+        document.getElementById("result").textContent = "";
+        document.querySelector('button').style.display = 'none';
+        document.getElementById("replayBtn").style.display = 'block';
+      }
+    }
+
+    function displayResultMessage() {
+      let message = "";
+      if (score === 0) {
+        message = "Ouch! Better luck next time.";
+      } else if (score > 0 && score < 5) {
+        message = "Nice try!";
+      } else if (score >= 5 && score < 8) {
+        message = "Well done!";
+      } else if (score >= 8) {
+        message = "Excellent! You really know your MCU!";
+      }
+      document.getElementById("result").textContent = message;
+    }
+
+    function restartQuiz() {
+      location.reload();
+    }
+
     displayQuestion();
-  } else {
-    document.getElementById("question").textContent = `Quiz Completed! Your Score: ${score}/${questions.length}`;
-    displayResultMessage();
-    document.getElementById("choices").innerHTML = "";
-    document.getElementById("result").textContent = "";
-    document.querySelector('button').style.display = 'none';
-  }
-}
-
-function displayResultMessage() {
-  let message = "";
-  if (score === 0) {
-    message = "Ouch! Better luck next time.";
-  } else if (score > 0 && score < 5) {
-    message = "Nice try!";
-  } else if (score >= 5 && score < 8) {
-    message = "Well done!";
-  } else if (score >= 8) {
-    message = "Excellent! You really know your MCU!";
-  }
-  document.getElementById("result").textContent = message;
-}
-
-function restartQuiz() {
-  location.reload();
-}
-
-displayQuestion();
-
   </script>
 </body>
 </html>
